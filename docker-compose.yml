@@ -2,7 +2,7 @@ services:
   db:
     image: postgres
     volumes:
-      - ./migration/:/docker-entrypoint-initdb.d/
+      - ./migrations/:/docker-entrypoint-initdb.d/
       # - /opt/pet_project/data:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=pass
