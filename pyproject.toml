@@ -12,10 +12,12 @@ python = "^3.10"
 aiohttp = "^3.9.0"
 pyyaml = "^6.0.1"
 asyncpg = "^0.29.0"
+pydantic = "^2.5.2"
 
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.11.0"
+ipykernel = "^6.27.1"
 
 [build-system]
 requires = ["poetry-core"]
