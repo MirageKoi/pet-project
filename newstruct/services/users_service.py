@@ -1,10 +1,11 @@
 from models.user import User, UserCreateValidation
+from pydantic.dataclasses import dataclass
 from repositories.users_repository import UsersRepository
 
 
+@dataclass
 class UsersService(object):
-    def __init__(self, users_repository: UsersRepository) -> None:
-        self.users_repository = users_repository
+    users_repository: UsersRepository
 
     # Get all users
     async def all(self) -> dict:
@@ -20,9 +21,7 @@ class UsersService(object):
 
     # Create user
     async def create(self, new_user: UserCreateValidation) -> User:
-        result = await self.users_repository.create_user(
-            email=new_user.email, age=new_user.age
-        )
+        result = await self.users_repository.create_user(email=new_user.email, age=new_user.age)
         return result
 
     # Update user
