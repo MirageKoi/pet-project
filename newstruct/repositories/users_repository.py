@@ -35,7 +35,7 @@ class UsersRepository(object):
     async def update_user(self, user: User) -> User:
         async with self.pool.acquire() as connection:
             record = await connection.fetchrow(
-                """UPDATE users SET email = email, age = age WHERE user_id = $3 RETURNING *""",
+                """UPDATE users SET email = $1, age = $2 WHERE user_id = $3 RETURNING *""",
                 user.email,
                 user.age,
                 user.user_id,
