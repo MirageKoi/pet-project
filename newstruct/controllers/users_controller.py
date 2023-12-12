@@ -30,8 +30,8 @@ class UsersController(object):
 
     async def user_update(self, request: Request) -> Response:
         user_id = int(request.match_info.get("id"))
-        kwargs = await request.post()
-        updated_user = await self.users_service.update(user_id=user_id, kwargs=kwargs)
+        body = await request.post()
+        updated_user = await self.users_service.update(user_id=user_id, **body)
         return web.Response(body=updated_user.model_dump_json(), content_type="applicatoin/json")
 
     async def user_delete(self, request: Request) -> Response:

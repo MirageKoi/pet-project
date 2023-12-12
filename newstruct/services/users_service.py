@@ -25,7 +25,7 @@ class UsersService(object):
         return result
 
     # Update user
-    async def update(self, user_id: int, kwargs):
+    async def update(self, user_id: int, **kwargs):
         # 1. Get user by id
         user = await self.users_repository.get_user(user_id)
 
