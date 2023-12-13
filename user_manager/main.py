@@ -1,5 +1,4 @@
 from aiohttp import web
-from aiohttp.web import middleware
 from asyncpg import Pool
 from controllers.users_controller import UsersController
 from repositories.users_repository import UsersRepository
@@ -41,14 +40,12 @@ async def init_app():
     repositories = await init_repositories(pool=pool)
     services = await init_services(users_repository=repositories)
     controllers = await init_controllers(users_service=services)
-    # app.router.add_post("/", UsersController.handle_create_user)
     app.router.add_get("/", controllers.hello_world)
     app.router.add_get("/users", controllers.user_list)
     app.router.add_get("/users/{id}", controllers.user_detail)
     app.router.add_post("/users", controllers.user_create)
     app.router.add_delete("/users/{id}", controllers.user_delete)
     app.router.add_put("/users/{id}", controllers.user_update)
-    # app["config"] = config
 
     return app
 
