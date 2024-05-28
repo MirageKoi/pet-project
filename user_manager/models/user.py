@@ -1,31 +1,41 @@
-import json
-from datetime import datetime
-from typing import Any, List
+import bcrypt
+from pydantic import BaseModel, ConfigDict, Field, computed_field
 
-from pydantic import BaseModel
+
+class UserCreate(BaseModel):
+    username: str
+    email: str
+    password: str
+
+    @computed_field  # type: ignore[misc]
+    @property
+    def password_salt(self) -> bytes:
+        if not hasattr(self, "_salt"):
+            self._salt = bcrypt.gensalt()
+        return self._salt
+
+    @computed_field  # type: ignore[misc]
+    @property
+    def password_hash(self) -> bytes:
+        b_password = self.password.encode("utf-8")
+        hashed_password = bcrypt.hashpw(b_password, self.password_salt)
+        return hashed_password
+
+
+class UserUpdate(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+    username: str | None = Field()
+    email: str | None = None
 
 
 class User(BaseModel):
     user_id: int
+    username: str
     email: str
-    age: int
-    created_on: datetime
-    updated_on: datetime | None
-
-    def to_response(self) -> dict[str, Any]:
-        return json.loads(self.model_dump_json())
+    password_hash: bytes = Field(exclude=True)
+    password_salt: bytes = Field(exclude=True)
 
 
 class UserList(BaseModel):
-    users: List[User]
-
-
-class UserCreateValidation(BaseModel):
-    """
-    A class for validation incoming data from POST request.
-    Validators in progress.
-
-    """
-
-    email: str
-    age: int
+    users: list[User]

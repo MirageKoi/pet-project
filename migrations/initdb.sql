@@ -1,24 +1,25 @@
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    age INT NOT NULL,
-    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_on TIMESTAMP DEFAULT NULL
-    );
+    password_hash bytea,
+    password_salt bytea
+);
 
-CREATE FUNCTION update_updated_on_users()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.updated_on = CURRENT_TIMESTAMP;
-    RETURN NEW;
-END;
-$$ language 'plpgsql';
 
-CREATE TRIGGER update_users_updated_on
-    BEFORE UPDATE
-    ON
-        users
-    FOR EACH ROW
-EXECUTE PROCEDURE update_updated_on_users();
+CREATE TABLE posts (
+    post_id SERIAL PRIMARY KEY,
+    user_id INT,
+    title VARCHAR(255),
+    content TEXT,
+    created_at TIMESTAMP,
+    CONSTRAINT fk_user
+        FOREIGN KEY(user_id)
+            REFERENCES users(user_id)
+            ON DELETE CASCADE
+);
 
-INSERT INTO users (email, age) VALUES ('test@sobaka.com', 22), ('super@emmail.com', 357);
+
+INSERT INTO users (username, email, password_hash, password_salt) VALUES ('admin', 'admin@gmail.com', 'admin', 'admin');
+
+INSERT INTO posts (user_id, title, content, created_at) VALUES (1, 'firstpost', 'a lot of text', '2016-06-22 19:10:25-07');
