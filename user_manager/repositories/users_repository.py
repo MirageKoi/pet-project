@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from asyncpg import Pool
+from asyncpg import Pool, Record
 from models.user import User, UserCreate
 
 
@@ -9,11 +9,10 @@ from models.user import User, UserCreate
 class UsersRepository:
     pool: Pool
 
-    async def get_all_users(self) -> List[User]:
+    async def get_all_users(self) -> list[Record]:
         async with self.pool.acquire() as connection:
             records = await connection.fetch("SELECT * FROM users")
-            result = [User.model_validate(dict(record)) for record in records]
-        return result
+        return records
 
     async def get_user(self, user_id: int) -> User:
         async with self.pool.acquire() as connection:

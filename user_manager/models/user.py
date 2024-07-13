@@ -1,5 +1,5 @@
 import bcrypt
-from pydantic import BaseModel, ConfigDict, Field, computed_field
+from pydantic import BaseModel, ConfigDict, Field, computed_field, field_validator
 
 
 class UserCreate(BaseModel):
@@ -20,6 +20,13 @@ class UserCreate(BaseModel):
         b_password = self.password.encode("utf-8")
         hashed_password = bcrypt.hashpw(b_password, self.password_salt)
         return hashed_password
+
+    @field_validator("password", mode="after")
+    @classmethod
+    def validate_email(cls, v):
+        if len(v) < 10:
+            raise ValueError("To short")
+        return v
 
 
 class UserUpdate(BaseModel):

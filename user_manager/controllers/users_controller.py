@@ -17,9 +17,8 @@ class UsersController:
 
     async def get_user_list(self, request: Request) -> Response:
         records = await self.users_service.all()
-        response = UserList(users=records)
-        users_data = response.model_dump_json(indent=2)
-        return web.Response(body=users_data, content_type="application/json")
+        response = records.model_dump_json(indent=2)
+        return web.Response(body=response, content_type="application/json")
 
     async def get_user_detail(self, request: Request) -> Response:
         user_id = int(request.match_info.get("id"))

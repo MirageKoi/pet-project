@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Any
 
-from models.user import User, UserCreate, UserUpdate
+from models.user import User, UserCreate, UserUpdate, UserList
 from repositories.users_repository import UsersRepository
 
 
@@ -9,17 +9,20 @@ from repositories.users_repository import UsersRepository
 class UsersService:
     users_repository: UsersRepository
 
-    async def all(self) -> list[User]:
+    async def all(self) -> UserList:
         result = await self.users_repository.get_all_users()
-        return result
+        return UserList(users=[dict(record) for record in result])
 
     async def get(self, user_id: int) -> User:
         result = await self.users_repository.get_user(user_id=user_id)
         return result
 
     async def create(self, item: User) -> User:
-        validated_data = UserCreate.model_validate(item)
-        result = await self.users_repository.create_user(validated_data)
+        try:
+            validated_data = UserCreate.model_validate(item)
+            result = await self.users_repository.create_user(validated_data)
+        except Exception:
+            raise
         return result
 
     async def update(self, user_id: int, item: dict[str, Any]) -> User:
