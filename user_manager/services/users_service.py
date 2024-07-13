@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Any
 
-from models.user import User, UserCreate, UserUpdate, UserList
+from schemas.user import User, UserCreate, UserUpdate, UserList
 from repositories.users_repository import UsersRepository
 
 

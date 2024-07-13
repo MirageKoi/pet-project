@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from models.posts import Post, PostCreate, PostUpdate
+from schemas.posts import Post, PostCreate, PostUpdate
 from repositories.posts_repository import PostsRepository
 
 

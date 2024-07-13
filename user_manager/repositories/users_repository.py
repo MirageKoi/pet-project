@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List
 
 from asyncpg import Pool, Record
-from models.user import User, UserCreate
+from schemas.user import User, UserCreate
 
 
 @dataclass

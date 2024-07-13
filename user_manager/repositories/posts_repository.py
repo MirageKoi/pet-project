@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from asyncpg import Pool
-from models.posts import Post, PostCreate
+from schemas.posts import Post, PostCreate
 
 from .repository import IRepository
 

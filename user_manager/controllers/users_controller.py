@@ -2,8 +2,8 @@ from dataclasses import dataclass
 
 from aiohttp import web
 from aiohttp.web import Request, Response
-from models.posts import Post, PostList
-from models.user import User, UserList
+from schemas.posts import Post, PostList
+from schemas.user import User, UserList
 from services.posts_service import PostsService
 from services.users_service import UsersService
 
